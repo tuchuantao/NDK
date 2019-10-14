@@ -3,6 +3,7 @@
 //
 #include <string.h>
 #include <jni.h>
+#include "util/log.h"
 
 /**
  * JNIEXPORT jstring JNICALL
@@ -45,10 +46,12 @@ Java_com_kevintu_ndk_jni_HelloJni_stringFromJNI(JNIEnv* env, jobject thiz)
     #define ABI "unknown"
 #endif
 
+    LOGD("日志输出： Java_com_kevintu_ndk_jni_HelloJni_stringFromJNI()");
     return (*env)->NewStringUTF(env, "Hello from JNI !  Compiled with ABI " ABI ".");
 }
 
 jstring Java_com_kevintu_ndk_jni_HelloJni_stringFromJNI2(JNIEnv* env, jobject thiz)
 {
+    LOGI("日志输出： Java_com_kevintu_ndk_jni_HelloJni_stringFromJNI2()");
     return (*env)->NewStringUTF(env, "Hello JNI, I am coming !");
 }

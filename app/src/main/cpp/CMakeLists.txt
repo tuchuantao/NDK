@@ -11,10 +11,9 @@ add_library(
 #        log # 指定CMake需要加载的NDK库
 #)
 
-
 # 链接hello-jni库依赖的库，注意下面变量名的配置
-#target_link_libraries(hello-jni
-#        ${log-lib}
-target_link_libraries(hello-jni
-                      android
-                      log)
+target_link_libraries(
+        hello-jni
+        android
+        log
+)
