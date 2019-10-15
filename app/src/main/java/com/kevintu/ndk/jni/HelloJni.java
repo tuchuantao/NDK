@@ -1,5 +1,7 @@
 package com.kevintu.ndk.jni;
 
+import com.kevintu.ndk.MainActivity;
+
 /**
  * Create by Kevin-Tu on 2019/10/14.
  */
@@ -13,5 +15,7 @@ public class HelloJni {
 
     public static native String stringFromJNI2();
 
-    //public native String unimplementedStringFromJNI();
+    public static native void startTicks(TimerCallback callback);
+
+    public static native void stopTicks();
 }
