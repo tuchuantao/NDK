@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.4.1)
 
 add_library(
     hello-jni # so库的名称 libhello-jni.so
-    SHARED # 设置为分享库
+    SHARED # 设置为动态库  STATIC/SHARED
     hello-jni.c jnicallback.c #指定C源文件的路径
 )
 
