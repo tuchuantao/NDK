@@ -3,7 +3,7 @@
 [https://www.jianshu.com/p/87ce6f565d37](https://www.jianshu.com/p/87ce6f565d37)<br/>
 
 # 一、NDK （Native Develop Kit）
-	Android NDK 是一套允许您使用 C 和 C++ 等语言，以原生代码实现部分应用的工具集。在开发某些类型的应用时，这有助于您重复使用以这些语言编写的代码库。并提供众多[平台库](https://developer.android.com/ndk/guides/stable_apis.html)，您可使用这些平台库管理原生 Activity 和访问物理设备组件，例如传感器和轻触输入。
+Android NDK 是一套允许您使用 C 和 C++ 等语言，以原生代码实现部分应用的工具集。在开发某些类型的应用时，这有助于您重复使用以这些语言编写的代码库。并提供众多[平台库](https://developer.android.com/ndk/guides/stable_apis.html)，您可使用这些平台库管理原生 Activity 和访问物理设备组件，例如传感器和轻触输入。
 
 ## 1.1 作用
 * 在平台之间移植其应用。
@@ -20,7 +20,7 @@ JNI，全称为Java Native Interface，即Java本地接口，JNI是Java调用Nat
 开发JNI程序会受到系统环境限制，因为用C/C++ 语言写出来的代码或模块，**编译过程当中要依赖当前操作系统环境所提供的一些库函数，并和本地库链接在一起**。而且编译后生成的二进制代码只能在本地操作系统环境下运行，因为不同的操作系统环境，有自己的本地库和CPU指令集，而且各个平台对标准C/C++的规范和标准库函数实现方式也有所区别。这就造成了各个平台使用JNI接口的Java程序，不再像以前那样自由的跨平台。如果要实现跨平台， 就必须将本地代码在不同的操作系统平台下编译出相应的动态库。
 
 ## 2.2 ABI管理
-	不同的 Android 手机使用不同的 CPU，而不同的 CPU 支持不同的指令集。CPU 与指令集的每种组合都有专属的应用二进制接口，即 ABI。ABI 可以非常精确地定义应用的机器代码在运行时如何与系统交互。您必须为应用要使用的每个 CPU 架构指定 ABI。
+不同的 Android 手机使用不同的 CPU，而不同的 CPU 支持不同的指令集。CPU 与指令集的每种组合都有专属的应用二进制接口，即 ABI。ABI 可以非常精确地定义应用的机器代码在运行时如何与系统交互。您必须为应用要使用的每个 CPU 架构指定 ABI。
 
 ```
 android {
@@ -104,16 +104,16 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved){
     }
 
     return JNI_VERSION_1_6;
+}
 ```
-# }
 
 
 
-**三、**Tools
-## 3.1** **CMake
-	CMake 是一个跨平台、开源的构建系统。它是一个集软件构建、测试、打包于一身的软件。它使用与平台和编译器独立的配置文件来对软件编译过程进行控制。
+# 三、Tools
+## 3.1 CMake
+CMake 是一个跨平台、开源的构建系统。它是一个集软件构建、测试、打包于一身的软件。它使用与平台和编译器独立的配置文件来对软件编译过程进行控制。
 
-	1、app/build.gradle
+1、app/build.gradle
 
 ```
 android {
@@ -126,7 +126,7 @@ android {
   }
 }
 ```
-	2、CMakeLists.txt
+2、CMakeLists.txt
 ```
 cmake_minimum_required(VERSION 3.4.1)
 add_library(
@@ -145,13 +145,13 @@ target_link_libraries(
         log
 )
 ```
+
 参考：
 
-    [https://developer.android.com/ndk/guides/cmake](https://developer.android.com/ndk/guides/cmake)
+[https://developer.android.com/ndk/guides/cmake](https://developer.android.com/ndk/guides/cmake)
+[https://blog.csdn.net/afei__/article/details/81201039](https://blog.csdn.net/afei__/article/details/81201039)
 
-	[https://blog.csdn.net/afei__/article/details/81201039](https://blog.csdn.net/afei__/article/details/81201039)
-
-	[https://blog.csdn.net/z_h_s/article/details/50699905](https://blog.csdn.net/z_h_s/article/details/50699905)
+[https://blog.csdn.net/z_h_s/article/details/50699905](https://blog.csdn.net/z_h_s/article/details/50699905)
 
 
 
