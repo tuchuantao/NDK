@@ -36,6 +36,11 @@ public class MainActivity extends AppCompatActivity implements TimerCallback {
             binding.resultView.setText(jniStr);
         });
 
+        binding.btn5.setOnClickListener(view -> {
+            String jniStr = HelloJni.stringFromJNI3();
+            binding.resultView.setText(jniStr);
+        });
+
         binding.btn3.setOnClickListener(view -> {
             HelloJni.startTicks(this);
         });

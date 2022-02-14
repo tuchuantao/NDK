@@ -6,17 +6,18 @@
 #include <pthread.h>
 #include <jni.h>
 #include "util/log.h"
+#include "hello-jni.c"
 #include <assert.h>
 
 
 typedef struct tick_context {
     JavaVM *javaVM;
     jclass jniHelperClz;
-    jobject  jniHelperObj;
-    jclass   mainActivityClz;
-    jobject  mainActivityObj;
-    pthread_mutex_t  lock;
-    int      done;
+    jobject jniHelperObj;
+    jclass mainActivityClz;
+    jobject mainActivityObj;
+    pthread_mutex_t lock;
+    int done;
 } TickContext;
 TickContext g_ctx;
 
@@ -109,6 +110,20 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 
     g_ctx.done = 0;
     g_ctx.mainActivityObj = NULL;
+
+
+    // 动态注册方法
+    const JNINativeMethod methods[] = {
+            {"stringFromJNI3", "()Ljava/lang/String;", (jstring*)stringFromJNI3} //
+            // Ljava/lang/String; 注意后面带的冒号
+    };
+    if (registerMethods(env, "com/kevintu/ndk/jni/HelloJni", methods, sizeof(methods) / sizeof
+    (JNINativeMethod)) == JNI_OK) {
+        LOGD("日志输出： 动态注册成功");
+    } else {
+        LOGD("日志输出： 动态注册失败");
+    }
+
     return JNI_VERSION_1_6;
 }
 

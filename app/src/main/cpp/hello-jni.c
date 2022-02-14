@@ -55,3 +55,23 @@ jstring Java_com_kevintu_ndk_jni_HelloJni_stringFromJNI2(JNIEnv* env, jobject th
     LOGI("日志输出： Java_com_kevintu_ndk_jni_HelloJni_stringFromJNI2()");
     return (*env)->NewStringUTF(env, "Hello JNI, I am coming !");
 }
+
+jstring stringFromJNI3(JNIEnv* env, jobject thiz) {
+    LOGI("日志输出： Java_com_kevintu_ndk_jni_HelloJni_stringFromJNI3()");
+    return (*env)->NewStringUTF(env, "Hello JNI, I am dynamic coming 3333!");
+}
+
+int registerMethods(JNIEnv *env, const char *className, const JNINativeMethod *methods, int
+methodLen) {
+    // 1、获取Class
+    jclass clazz = (*env)->FindClass(env, className);
+    if (clazz == NULL) {
+        return JNI_ERR;
+    }
+
+    // 2、注册方法
+    if((*env)->RegisterNatives(env, clazz, methods, methodLen) < 0) {
+        return JNI_ERR;
+    }
+    return JNI_OK;
+}
