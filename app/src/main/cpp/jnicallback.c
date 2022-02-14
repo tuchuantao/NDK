@@ -73,6 +73,43 @@ void queryRuntimeInfo(JNIEnv* env, jobject thiz) {
     (void)result;  // silence the compiler warning
 }
 
+void handler(int signum) {
+    LOGD("singnum = %d", signum);
+}
+
+void my_singal_handler(int signum, siginfo_t *info, void *reserved) {
+    LOGI("signum: %d", signum);
+
+    // 创建子线程上报crash
+    // 在crash发生的线程上报，部分机型会有回调不到Java层的情况
+//    pthread_create(&my_report_pthread, NULL, threadReport, &signum);
+
+    //调用原先的处理函数
+//    old_signalhandlers[signum].sa_handler(signum);
+}
+
+void set_up_global_signal_handler() {
+    struct sigaction handler;
+    memset(&handler, 0, sizeof(struct sigaction));
+    handler.sa_sigaction = my_singal_handler;
+    handler.sa_flags = SA_RESETHAND;
+
+    //register signal num
+    #define CATCH_SIG_NUM(NUM) sigaction(NUM, &handler, NULL)
+
+    CATCH_SIG_NUM(SIGQUIT);
+    CATCH_SIG_NUM(SIGILL);
+    CATCH_SIG_NUM(SIGABRT);
+    CATCH_SIG_NUM(SIGBUS);
+    CATCH_SIG_NUM(SIGFPE);
+    CATCH_SIG_NUM(SIGSEGV);
+    CATCH_SIG_NUM(SIGPIPE);
+    CATCH_SIG_NUM(SIGSTKFLT);
+    CATCH_SIG_NUM(SIGTERM);
+
+    #undef CATCH_SIG_NUM
+}
+
 /*
  * processing one time initialization:
  *     Cache the javaVM into our context
@@ -123,6 +160,58 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     } else {
         LOGD("日志输出： 动态注册失败");
     }
+
+    // 全局捕获 Native 异常
+    // signal
+//    signal(SIGQUIT, &handler);
+//    signal(SIGILL, &handler);
+//    signal(SIGABRT, &handler);
+//    signal(SIGIOT, &handler);
+//    signal(SIGBUS, &handler);
+//    signal(SIGFPE, &handler);
+//    signal(SIGSEGV, &handler);
+//    signal(SIGPIPE, &handler);
+//    signal(SIGSTKFLT, &handler);
+//    signal(SIGTERM, &handler);
+
+
+//signal(SIGHUP, &handler);
+//signal(SIGINT, &handler);
+//signal(SIGQUIT, &handler);
+//signal(SIGILL, &handler);
+//signal(SIGTRAP, &handler);
+//signal(SIGABRT, &handler);
+//signal(SIGIOT, &handler);
+//signal(SIGBUS, &handler);
+//signal(SIGFPE, &handler);
+//signal(SIGKILL, &handler);
+//signal(SIGUSR1, &handler);
+//signal(SIGSEGV, &handler);
+//signal(SIGUSR2, &handler);
+//signal(SIGPIPE, &handler);
+//signal(SIGALRM, &handler);
+//signal(SIGTERM, &handler);
+//signal(SIGSTKFLT, &handler);
+//signal(SIGCHLD, &handler);
+//signal(SIGCONT, &handler);
+//signal(SIGSTOP, &handler);
+//signal(SIGTSTP, &handler);
+//signal(SIGTTIN, &handler);
+//signal(SIGTTOU, &handler);
+//signal(SIGURG, &handler);
+//signal(SIGXCPU, &handler);
+//signal(SIGXFSZ, &handler);
+//signal(SIGVTALRM, &handler);
+//signal(SIGPROF, &handler);
+//signal(SIGWINCH, &handler);
+//signal(SIGIO, &handler);
+//signal(SIGPOLL, &handler);
+//signal(SIGPWR, &handler);
+//signal(SIGSYS, &handler);
+//signal(SIGUNUSED, &handler);
+//signal(__SIGRTMIN, &handler);
+
+//    set_up_global_signal_handler();
 
     return JNI_VERSION_1_6;
 }
@@ -205,6 +294,8 @@ void* UpdateTicks(void* context) {
 
     sendJavaMsg(env, pctx->jniHelperObj, statusId,
                 "TickerThread status: ticking stopped");
+    (*env)->DeleteWeakGlobalRef(env, statusId);
+    (*env)->DeleteWeakGlobalRef(env, timerId);
     (*javaVM)->DetachCurrentThread(javaVM);
     return context;
 }
